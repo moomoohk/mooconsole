@@ -7,7 +7,7 @@ You can download it from [here](https://github.com/moomoohk/MooConsole/blob/mast
 
 Get the JavaDocs [here](https://github.com/moomoohk/MooConsole/blob/master/JavaDocs.zip?raw=true).
 
-Watch a demo [here](http://www.youtube.com/watch?v=YkzAVoO70qw).
+You can find a demo video I made [here](http://www.youtube.com/watch?v=YkzAVoO70qw).
 
 
 
