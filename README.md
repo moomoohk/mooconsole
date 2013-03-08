@@ -8,3 +8,7 @@ You can download it from [here](https://github.com/moomoohk/MooConsole/blob/mast
 Get the JavaDocs [here](https://github.com/moomoohk/MooConsole/blob/master/JavaDocs.zip?raw=true).
 
 (Demo coming soon!)
+
+
+
+![](http://i.imgur.com/cqqHCi9.png "What it looks like")
