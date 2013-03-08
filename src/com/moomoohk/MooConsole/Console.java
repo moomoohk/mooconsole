@@ -7,6 +7,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -42,6 +44,7 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
+	public static final String version="1.1"; 
 	
 	/**
 	 * Constructor method.
@@ -49,18 +52,27 @@ public class Console extends JFrame
 	public Console()
 	{
 		initElements();
-		setTitle("MooConsole v1.0");
+		setTitle("MooConsole v"+version);
 		setMinimumSize(new Dimension(510, 250));
 		setBackground(Color.gray.darker());
 		getContentPane().setLayout(getSpringLayout());
 		getContentPane().add(this.scrollPane);
 		getContentPane().add(this.input);
 		setConsoleTextColor(new Color(81, 148, 237));
-		addText("Welcome to MooConsole v1.0!\n");
+		addText("Welcome to MooConsole v"+version+"\n");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
-		setVisible(true);
+		addWindowFocusListener(new WindowFocusListener()
+		{
+			public void windowLostFocus(WindowEvent arg0)
+			{
+			}
+			public void windowGainedFocus(WindowEvent arg0)
+			{
+				input.requestFocus();
+			}
+		});
 	}
 	
 	/**
@@ -80,7 +92,7 @@ public class Console extends JFrame
 		this.input.addKeyListener(new KeyAdapter()
 		{
 			@Override
-			public void keyReleased(KeyEvent arg0)
+			public void keyPressed(KeyEvent arg0)
 			{
 				if (arg0.getKeyCode() == 10)
 				{
@@ -99,6 +111,8 @@ public class Console extends JFrame
 						input.setText("");
 					}
 				}
+				if(arg0.getKeyCode()==27)
+					input.setText("");
 			}
 		});
 
@@ -153,9 +167,10 @@ public class Console extends JFrame
 				});
 			}
 		}
-		catch (BadLocationException localBadLocationException)
+		catch (BadLocationException e)
 		{
-			addText("[ERROR]");
+			setConsoleTextColor(Color.red);
+			addText("[ERROR]: "+e.getStackTrace().toString()+"/n");
 		}
 	}
 	
@@ -192,5 +207,9 @@ public class Console extends JFrame
 		commands.add(help);
 		commands.add(spam);
 		console.loadCommands(commands);
+	}
+	public static void main(String[] args)
+	{
+		runDemoTest();
 	}
 }

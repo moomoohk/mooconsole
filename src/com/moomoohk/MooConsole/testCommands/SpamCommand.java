@@ -1,6 +1,7 @@
 
 package com.moomoohk.MooConsole.testCommands;
 
+import java.awt.Color;
 import java.util.Random;
 
 import com.moomoohk.MooCommands.Command;
@@ -18,6 +19,7 @@ public class SpamCommand extends Command<Console>
 	public void execute(Console handler, String[] params)
 	{
 		this.message="";
+		handler.setConsoleTextColor(new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat()));
 		for(int i=0; i<20; i++)
 		{
 			int length=new Random().nextInt(20)+5;
