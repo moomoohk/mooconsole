@@ -44,7 +44,7 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
-	public static final String version="1.1"; 
+	public static final String version="1.2"; 
 	
 	/**
 	 * Constructor method.
@@ -97,11 +97,16 @@ public class Console extends JFrame
 				if (arg0.getKeyCode() == 10)
 				{
 					setConsoleTextColor(Color.white);
+					if(input.getText().trim().length()==0)
+					{
+						input.setText("");
+						return;
+					}
 					Command<?> command = Command.getCommand(Command.parseCommand(input.getText()));
 					if (command == null)
 					{
 						setConsoleTextColor(Color.red);
-						addText("Command not found! ("+Command.parseCommand(input.getText())+")\n");
+						addText("Command not found!\n");
 						input.setText("");
 					}
 					else
@@ -115,7 +120,6 @@ public class Console extends JFrame
 					input.setText("");
 			}
 		});
-
 		JTextPane consoleTextPane = new JTextPane();
 		consoleTextPane.setEditable(false);
 		consoleTextPane.setBackground(Color.gray.darker().darker().darker());
@@ -207,6 +211,7 @@ public class Console extends JFrame
 		commands.add(help);
 		commands.add(spam);
 		console.loadCommands(commands);
+		console.setVisible(true);
 	}
 	public static void main(String[] args)
 	{
