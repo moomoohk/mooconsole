@@ -30,9 +30,9 @@ import com.moomoohk.MooConsole.testCommands.SpamCommand;
 import com.moomoohk.MooConsole.testCommands.TestCommand;
 
 /**
- * @author      Meshulam Silk <moomoohk@ymail.com>
- * @version     1.0
- * @since       2013-03-08
+ * @author Meshulam Silk <moomoohk@ymail.com>
+ * @version 1.0
+ * @since 2013-03-08
  */
 public class Console extends JFrame
 {
@@ -44,22 +44,22 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
-	public static final String version="1.2"; 
-	
+	public static final String version = "1.3";
+
 	/**
 	 * Constructor method.
 	 */
 	public Console()
 	{
 		initElements();
-		setTitle("MooConsole v"+version);
+		setTitle("MooConsole v" + version);
 		setMinimumSize(new Dimension(510, 250));
 		setBackground(Color.gray.darker());
 		getContentPane().setLayout(getSpringLayout());
 		getContentPane().add(this.scrollPane);
 		getContentPane().add(this.input);
 		setConsoleTextColor(new Color(81, 148, 237));
-		addText("Welcome to MooConsole v"+version+"\n");
+		addText("Welcome to MooConsole v" + version + "\n");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
@@ -68,13 +68,14 @@ public class Console extends JFrame
 			public void windowLostFocus(WindowEvent arg0)
 			{
 			}
+
 			public void windowGainedFocus(WindowEvent arg0)
 			{
 				input.requestFocus();
 			}
 		});
 	}
-	
+
 	/**
 	 * Initializes the various GUI elements.
 	 */
@@ -97,7 +98,7 @@ public class Console extends JFrame
 				if (arg0.getKeyCode() == 10)
 				{
 					setConsoleTextColor(Color.white);
-					if(input.getText().trim().length()==0)
+					if (input.getText().trim().length() == 0)
 					{
 						input.setText("");
 						return;
@@ -112,11 +113,12 @@ public class Console extends JFrame
 					else
 					{
 						command.checkAndExecute(Command.parseParams(input.getText()));
-						addText(command.getMessage() + "\n");
+						if(command.getMessage()!=null)
+							addText(command.getMessage() + "\n");
 						input.setText("");
 					}
 				}
-				if(arg0.getKeyCode()==27)
+				if (arg0.getKeyCode() == 27)
 					input.setText("");
 			}
 		});
@@ -131,9 +133,10 @@ public class Console extends JFrame
 		consoleTextPane.setFont(new Font("Dialog", 0, 11));
 		nowrapPanel.add(consoleTextPane, "Center");
 	}
-	
+
 	/**
 	 * Creates and returns a SpringLayout.
+	 * 
 	 * @return A SpringLayout.
 	 */
 	private SpringLayout getSpringLayout()
@@ -148,10 +151,12 @@ public class Console extends JFrame
 		layout.putConstraint(SpringLayout.SOUTH, this.scrollPane, -40, SpringLayout.SOUTH, getContentPane());
 		return layout;
 	}
-	
+
 	/**
 	 * Adds a String to the text area.
-	 * @param text String to add.
+	 * 
+	 * @param text
+	 *            String to add.
 	 */
 	public void addText(String text)
 	{
@@ -174,29 +179,33 @@ public class Console extends JFrame
 		catch (BadLocationException e)
 		{
 			setConsoleTextColor(Color.red);
-			addText("[ERROR]: "+e.getStackTrace().toString()+"/n");
+			addText("[ERROR]: " + e.getStackTrace().toString() + "/n");
 		}
 	}
-	
+
 	/**
 	 * Sets the font color of the text area.
-	 * @param color The color to use.
+	 * 
+	 * @param color
+	 *            The color to use.
 	 */
 	public void setConsoleTextColor(Color color)
 	{
 		StyleConstants.setForeground(this.consoleAttributeSet, color);
 	}
-	
+
 	/**
 	 * Receives an ArrayList of commands and adds them to the commands list.
-	 * @param commands ArrayList of commands.
+	 * 
+	 * @param commands
+	 *            ArrayList of commands.
 	 */
 	public void loadCommands(ArrayList<Command<?>> commands)
 	{
 		for (Command<?> command : commands)
 			Command.add(command);
 	}
-	
+
 	/**
 	 * A little demo I made with 3 basic commands.
 	 */
@@ -204,15 +213,18 @@ public class Console extends JFrame
 	{
 		Console console = new Console();
 		TestCommand test = new TestCommand(console, "test", "Test command (will print out its parameters).", 0, -1);
-		HelpCommand help=new HelpCommand(console, "help", "Shows help.", 0, 1);
-		SpamCommand spam=new SpamCommand(console, "spam", "Spams the console.", 0, 0);
+		HelpCommand help = new HelpCommand(console, "help", "Shows help.", 0, 1);
+		HelpCommand help2 = new HelpCommand(console, "help2", "Shows help.", 0, 1);
+		SpamCommand spam = new SpamCommand(console, "spam", "Spams the console.", 0, 0);
 		ArrayList<Command<?>> commands = new ArrayList<Command<?>>();
 		commands.add(test);
 		commands.add(help);
+		commands.add(help2);
 		commands.add(spam);
 		console.loadCommands(commands);
 		console.setVisible(true);
 	}
+
 	public static void main(String[] args)
 	{
 		runDemoTest();
