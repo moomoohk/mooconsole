@@ -44,7 +44,9 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
-	public static final String version = "1.3";
+	public static final String version = "1.4";
+	private ArrayList<String> log;
+	private int lastCommandSelector;
 
 	/**
 	 * Constructor method.
@@ -61,6 +63,8 @@ public class Console extends JFrame
 		setConsoleTextColor(new Color(81, 148, 237));
 		addText("Welcome to MooConsole v" + version + "\n");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		log=new ArrayList<String>();
+		lastCommandSelector=-1;
 		pack();
 		setLocationRelativeTo(null);
 		addWindowFocusListener(new WindowFocusListener()
@@ -95,8 +99,34 @@ public class Console extends JFrame
 			@Override
 			public void keyPressed(KeyEvent arg0)
 			{
+				if(arg0.getKeyCode()==38) //up
+				{
+					if(log.size()>0)
+					{
+						if(lastCommandSelector!=log.size()-1)
+							lastCommandSelector++;
+						if(lastCommandSelector==log.size())
+							lastCommandSelector=log.size()-1;
+						input.setText(log.get(lastCommandSelector));
+					}
+				}
+				else
+					if(arg0.getKeyCode()==40) //down
+					{
+						if(lastCommandSelector!=-1)
+							lastCommandSelector--;
+						if(lastCommandSelector==-1)
+							input.setText("");
+						if(log.size()>0&&lastCommandSelector>=0)
+							input.setText(log.get(lastCommandSelector));
+					}
+					else
+						lastCommandSelector=-1;
 				if (arg0.getKeyCode() == 10)
 				{
+					if(input.getText().trim().length()!=0&&log.indexOf(input.getText())!=0)
+						log.add(0, input.getText());
+					lastCommandSelector=-1;
 					setConsoleTextColor(Color.white);
 					if (input.getText().trim().length() == 0)
 					{
