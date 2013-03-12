@@ -44,7 +44,7 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
-	public static final String version = "1.4";
+	public static final String version = "1.5";
 	private ArrayList<String> log;
 	private int lastCommandSelector;
 
@@ -133,18 +133,27 @@ public class Console extends JFrame
 						input.setText("");
 						return;
 					}
-					Command<?> command = Command.getCommand(Command.parseCommand(input.getText()));
-					if (command == null)
+					try
+					{
+						Command<?> command = Command.getCommand(Command.parseCommand(input.getText()));
+						if (command == null)
+						{
+							setConsoleTextColor(Color.red);
+							addText("Command not found!\n");
+							input.setText("");
+						}
+						else
+						{
+							command.checkAndExecute(Command.parseParams(input.getText()));
+							if(command.getMessage()!=null)
+								addText(command.getMessage() + "\n");
+							input.setText("");
+						}
+					}
+					catch(Exception e)
 					{
 						setConsoleTextColor(Color.red);
-						addText("Command not found!\n");
-						input.setText("");
-					}
-					else
-					{
-						command.checkAndExecute(Command.parseParams(input.getText()));
-						if(command.getMessage()!=null)
-							addText(command.getMessage() + "\n");
+						addText("Problem! Are you sure you have MooCommands installed? Get the latest version here: https://github.com/moomoohk/MooCommands/raw/master/Build/MooCommands.jar\n");
 						input.setText("");
 					}
 				}
@@ -244,7 +253,7 @@ public class Console extends JFrame
 		Console console = new Console();
 		TestCommand test = new TestCommand(console, "test", "Test command (will print out its parameters).", 0, -1);
 		HelpCommand help = new HelpCommand(console, "help", "Shows help.", 0, 1);
-		HelpCommand help2 = new HelpCommand(console, "help2", "Shows help.", 0, 1);
+		HelpCommand help2 = new HelpCommand(console, "help2", "Shows help. (same as help)", 0, 1);
 		SpamCommand spam = new SpamCommand(console, "spam", "Spams the console.", 0, 0);
 		ArrayList<Command<?>> commands = new ArrayList<Command<?>>();
 		commands.add(test);
