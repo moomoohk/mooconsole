@@ -44,7 +44,7 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
-	public static final String version = "1.5";
+	public static final String version = "1.6";
 	private ArrayList<String> log;
 	private int lastCommandSelector;
 
@@ -111,7 +111,7 @@ public class Console extends JFrame
 					}
 				}
 				else
-					if(arg0.getKeyCode()==40) //down
+					if(arg0.getKeyCode()==40) 
 					{
 						if(lastCommandSelector!=-1)
 							lastCommandSelector--;
@@ -150,7 +150,7 @@ public class Console extends JFrame
 							input.setText("");
 						}
 					}
-					catch(Exception e)
+					catch(NoClassDefFoundError e)
 					{
 						setConsoleTextColor(Color.red);
 						addText("Problem! Are you sure you have MooCommands installed? Get the latest version here: https://github.com/moomoohk/MooCommands/raw/master/Build/MooCommands.jar\n");
