@@ -44,7 +44,7 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
-	public static final String version = "1.6";
+	public static final String version = "1.7";
 	private ArrayList<String> log;
 	private int lastCommandSelector;
 
@@ -99,7 +99,7 @@ public class Console extends JFrame
 			@Override
 			public void keyPressed(KeyEvent arg0)
 			{
-				if(arg0.getKeyCode()==38) //up
+				if(arg0.getKeyCode()==38)
 				{
 					if(log.size()>0)
 					{
@@ -145,7 +145,7 @@ public class Console extends JFrame
 						else
 						{
 							command.checkAndExecute(Command.parseParams(input.getText()));
-							if(command.getMessage()!=null)
+							if(command.getMessage()!=null&&command.getMessage().trim()!="")
 								addText(command.getMessage() + "\n");
 							input.setText("");
 						}
