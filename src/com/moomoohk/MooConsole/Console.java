@@ -44,7 +44,7 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
-	public static final String version = "1.7";
+	public static final String version = "1.8";
 	private ArrayList<String> log;
 	private int lastCommandSelector;
 
@@ -56,7 +56,7 @@ public class Console extends JFrame
 		initElements();
 		setTitle("MooConsole v" + version);
 		setMinimumSize(new Dimension(510, 250));
-		setBackground(Color.gray.darker());
+		getContentPane().setBackground(Color.gray.darker());
 		getContentPane().setLayout(getSpringLayout());
 		getContentPane().add(this.scrollPane);
 		getContentPane().add(this.input);
