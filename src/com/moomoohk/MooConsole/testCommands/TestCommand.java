@@ -15,12 +15,8 @@ public class TestCommand extends Command<Console>
 	@Override
 	public void execute(Console handler, String[] params)
 	{
-		if(params.length==0)
-		{
-			this.message="No params.";
-			return;
-		}
 		this.message=stringParams(params, 0);
+		System.out.println(this.message);
 	}
 }
 

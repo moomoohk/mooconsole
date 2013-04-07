@@ -9,6 +9,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -44,7 +47,7 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
-	public static final String version = "1.8";
+	public static final String version = "1.9";
 	private ArrayList<String> log;
 	private int lastCommandSelector;
 
@@ -63,8 +66,8 @@ public class Console extends JFrame
 		setConsoleTextColor(new Color(81, 148, 237));
 		addText("Welcome to MooConsole v" + version + "\n");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		log=new ArrayList<String>();
-		lastCommandSelector=-1;
+		log = new ArrayList<String>();
+		lastCommandSelector = -1;
 		pack();
 		setLocationRelativeTo(null);
 		addWindowFocusListener(new WindowFocusListener()
@@ -99,34 +102,34 @@ public class Console extends JFrame
 			@Override
 			public void keyPressed(KeyEvent arg0)
 			{
-				if(arg0.getKeyCode()==38)
+				if (arg0.getKeyCode() == 38)
 				{
-					if(log.size()>0)
+					if (log.size() > 0)
 					{
-						if(lastCommandSelector!=log.size()-1)
+						if (lastCommandSelector != log.size() - 1)
 							lastCommandSelector++;
-						if(lastCommandSelector==log.size())
-							lastCommandSelector=log.size()-1;
+						if (lastCommandSelector == log.size())
+							lastCommandSelector = log.size() - 1;
 						input.setText(log.get(lastCommandSelector));
 					}
 				}
 				else
-					if(arg0.getKeyCode()==40) 
+					if (arg0.getKeyCode() == 40)
 					{
-						if(lastCommandSelector!=-1)
+						if (lastCommandSelector != -1)
 							lastCommandSelector--;
-						if(lastCommandSelector==-1)
+						if (lastCommandSelector == -1)
 							input.setText("");
-						if(log.size()>0&&lastCommandSelector>=0)
+						if (log.size() > 0 && lastCommandSelector >= 0)
 							input.setText(log.get(lastCommandSelector));
 					}
 					else
-						lastCommandSelector=-1;
+						lastCommandSelector = -1;
 				if (arg0.getKeyCode() == 10)
 				{
-					if(input.getText().trim().length()!=0&&log.indexOf(input.getText())!=0)
+					if (input.getText().trim().length() != 0 && log.indexOf(input.getText()) != 0)
 						log.add(0, input.getText());
-					lastCommandSelector=-1;
+					lastCommandSelector = -1;
 					setConsoleTextColor(Color.white);
 					if (input.getText().trim().length() == 0)
 					{
@@ -145,12 +148,12 @@ public class Console extends JFrame
 						else
 						{
 							command.checkAndExecute(Command.parseParams(input.getText()));
-							if(command.getMessage()!=null&&command.getMessage().trim()!="")
+							if (command.getMessage() != null && command.getMessage().trim() != "")
 								addText(command.getMessage() + "\n");
 							input.setText("");
 						}
 					}
-					catch(NoClassDefFoundError e)
+					catch (NoClassDefFoundError e)
 					{
 						setConsoleTextColor(Color.red);
 						addText("Problem! Are you sure you have MooCommands installed? Get the latest version here: https://github.com/moomoohk/MooCommands/raw/master/Build/MooCommands.jar\n");
@@ -246,6 +249,62 @@ public class Console extends JFrame
 	}
 
 	/**
+	 * Overrides the Eclipse console.
+	 * <p>
+	 * System.out.println and System.err.println Strings will be printed in the
+	 * MooConsole instead of in the Eclipse console.
+	 */
+	public void setOutputOverride()
+	{
+		System.setOut(new OutputOverride(System.out, false));
+		System.setErr(new OutputOverride(System.err, true));
+	}
+
+	private class OutputOverride extends PrintStream
+	{
+		private boolean error;
+
+		public OutputOverride(OutputStream str, boolean error)
+		{
+			super(str);
+			this.error = error;
+		}
+
+		@Override
+		public void write(byte[] b) throws IOException
+		{
+			write(new String(b).trim());
+		}
+
+		@Override
+		public void write(byte[] buf, int off, int len)
+		{
+			write(new String(buf, off, len).trim());
+		}
+
+		private void write(String text)
+		{
+			if (!text.equals("") && !text.equals("\n"))
+				if (this.error)
+				{
+					setConsoleTextColor(Color.red);
+					addText(text + "\n");
+				}
+				else
+				{
+					setConsoleTextColor(Color.gray);
+					addText("[From Console (" + Thread.currentThread().getStackTrace()[10].getFileName().subSequence(0, Thread.currentThread().getStackTrace()[10].getFileName().indexOf(".java")) + ":" + Thread.currentThread().getStackTrace()[10].getLineNumber() + ")] " + text + "\n");
+				}
+		}
+
+		@Override
+		public void write(int b)
+		{
+			write("" + b);
+		}
+	}
+
+	/**
 	 * A little demo I made with 3 basic commands.
 	 */
 	public static void runDemoTest()
@@ -253,19 +312,20 @@ public class Console extends JFrame
 		Console console = new Console();
 		TestCommand test = new TestCommand(console, "test", "Test command (will print out its parameters).", 0, -1);
 		HelpCommand help = new HelpCommand(console, "help", "Shows help.", 0, 1);
-		HelpCommand help2 = new HelpCommand(console, "help2", "Shows help. (same as help)", 0, 1);
 		SpamCommand spam = new SpamCommand(console, "spam", "Spams the console.", 0, 0);
 		ArrayList<Command<?>> commands = new ArrayList<Command<?>>();
 		commands.add(test);
 		commands.add(help);
-		commands.add(help2);
 		commands.add(spam);
 		console.loadCommands(commands);
+		console.setOutputOverride();
 		console.setVisible(true);
 	}
 
 	public static void main(String[] args)
 	{
 		runDemoTest();
+		for (int i = 0; i < 5; i++)
+			System.out.println(i);
 	}
 }
