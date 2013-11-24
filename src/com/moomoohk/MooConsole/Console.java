@@ -28,9 +28,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import com.moomoohk.MooCommands.Command;
-import com.moomoohk.MooConsole.testCommands.HelpCommand;
-import com.moomoohk.MooConsole.testCommands.SpamCommand;
-import com.moomoohk.MooConsole.testCommands.TestCommand;
+import com.moomoohk.MooCommands.CommandsManager;
 
 /**
  * @author Meshulam Silk <moomoohk@ymail.com>
@@ -47,7 +45,7 @@ public class Console extends JFrame
 	private StyledDocument consoleDoc;
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
-	public static final String version = "1.9";
+	public static final String version = "2.0";
 	private ArrayList<String> log;
 	private int lastCommandSelector;
 
@@ -63,8 +61,7 @@ public class Console extends JFrame
 		getContentPane().setLayout(getSpringLayout());
 		getContentPane().add(this.scrollPane);
 		getContentPane().add(this.input);
-		setConsoleTextColor(new Color(81, 148, 237));
-		addText("Welcome to MooConsole v" + version + "\n");
+		addText("Welcome to MooConsole v" + version + "\n", new Color(81, 148, 237));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		log = new ArrayList<String>();
 		lastCommandSelector = -1;
@@ -130,7 +127,6 @@ public class Console extends JFrame
 					if (input.getText().trim().length() != 0 && log.indexOf(input.getText()) != 0)
 						log.add(0, input.getText());
 					lastCommandSelector = -1;
-					setConsoleTextColor(Color.white);
 					if (input.getText().trim().length() == 0)
 					{
 						input.setText("");
@@ -138,25 +134,23 @@ public class Console extends JFrame
 					}
 					try
 					{
-						Command<?> command = Command.getCommand(Command.parseCommand(input.getText()));
+						Command command = CommandsManager.findCommand(input.getText());
 						if (command == null)
 						{
-							setConsoleTextColor(Color.red);
-							addText("Command not found!\n");
+							addText("Command not found!\n", Color.red);
 							input.setText("");
 						}
 						else
 						{
-							command.checkAndExecute(Command.parseParams(input.getText()));
-							if (command.getMessage() != null && command.getMessage().trim() != "")
-								addText(command.getMessage() + "\n");
+							String output = command.checkAndExecute(CommandsManager.parseParams(input.getText()));
+							if (output != null && output.trim() != "")
+								addText(output + "\n", command.getOutputColor());
 							input.setText("");
 						}
 					}
 					catch (NoClassDefFoundError e)
 					{
-						setConsoleTextColor(Color.red);
-						addText("Problem! Are you sure you have MooCommands installed? Get the latest version here: https://github.com/moomoohk/MooCommands/raw/master/Build/MooCommands.jar\n");
+						addText("Problem! Are you sure you have MooCommands installed? Get the latest version here: https://github.com/moomoohk/MooCommands/raw/master/Build/MooCommands.jar\n", Color.red);
 						input.setText("");
 					}
 				}
@@ -195,13 +189,30 @@ public class Console extends JFrame
 	}
 
 	/**
-	 * Adds a String to the text area.
+	 * Adds a String to the text area and colors the font white.
 	 * 
 	 * @param text
 	 *            String to add.
 	 */
 	public void addText(String text)
 	{
+		addText(text, Color.white);
+	}
+
+	/**
+	 * Adds a String to the text area.
+	 * 
+	 * @param text
+	 *            String to add.
+	 * @param Color
+	 *            of font to use.
+	 */
+	public void addText(String text, Color color)
+	{
+		if (color != null)
+			StyleConstants.setForeground(this.consoleAttributeSet, color);
+		else
+			StyleConstants.setForeground(this.consoleAttributeSet, Color.white);
 		try
 		{
 			final JScrollBar vbar = this.scrollPane.getVerticalScrollBar();
@@ -220,39 +231,14 @@ public class Console extends JFrame
 		}
 		catch (BadLocationException e)
 		{
-			setConsoleTextColor(Color.red);
-			addText("[ERROR]: " + e.getStackTrace().toString() + "/n");
+			addText("[ERROR]: " + e.getStackTrace().toString() + "/n", Color.red);
 		}
-	}
-
-	/**
-	 * Sets the font color of the text area.
-	 * 
-	 * @param color
-	 *            The color to use.
-	 */
-	public void setConsoleTextColor(Color color)
-	{
-		StyleConstants.setForeground(this.consoleAttributeSet, color);
-	}
-
-	/**
-	 * Receives an ArrayList of commands and adds them to the commands list.
-	 * 
-	 * @param commands
-	 *            ArrayList of commands.
-	 */
-	public void loadCommands(ArrayList<Command<?>> commands)
-	{
-		for (Command<?> command : commands)
-			Command.add(command);
 	}
 
 	/**
 	 * Overrides the Eclipse console.
 	 * <p>
-	 * System.out.println and System.err.println Strings will be printed in the
-	 * MooConsole instead of in the Eclipse console.
+	 * System.out.println and System.err.println Strings will be printed in the MooConsole instead of in the Eclipse console.
 	 */
 	public void setOutputOverride()
 	{
@@ -285,16 +271,11 @@ public class Console extends JFrame
 		private void write(String text)
 		{
 			if (!text.equals("") && !text.equals("\n"))
-				if (this.error)
-				{
-					setConsoleTextColor(Color.red);
-					addText(text + "\n");
-				}
-				else
-				{
-					setConsoleTextColor(Color.gray);
-					addText("[From Console (" + Thread.currentThread().getStackTrace()[10].getFileName().subSequence(0, Thread.currentThread().getStackTrace()[10].getFileName().indexOf(".java")) + ":" + Thread.currentThread().getStackTrace()[10].getLineNumber() + ")] " + text + "\n");
-				}
+				if (!text.equals("") && !text.equals("\n"))
+					if (this.error)
+						addText(text + "\n", Color.red);
+					else
+						addText("[From Console (" + Thread.currentThread().getStackTrace()[10].getFileName().subSequence(0, Thread.currentThread().getStackTrace()[10].getFileName().indexOf(".java")) + ":" + Thread.currentThread().getStackTrace()[10].getLineNumber() + ")] " + text + "\n", Color.gray);
 		}
 
 		@Override
@@ -302,30 +283,5 @@ public class Console extends JFrame
 		{
 			write("" + b);
 		}
-	}
-
-	/**
-	 * A little demo I made with 3 basic commands.
-	 */
-	public static void runDemoTest()
-	{
-		Console console = new Console();
-		TestCommand test = new TestCommand(console, "test", "Test command (will print out its parameters).", 0, -1);
-		HelpCommand help = new HelpCommand(console, "help", "Shows help.", 0, 1);
-		SpamCommand spam = new SpamCommand(console, "spam", "Spams the console.", 0, 0);
-		ArrayList<Command<?>> commands = new ArrayList<Command<?>>();
-		commands.add(test);
-		commands.add(help);
-		commands.add(spam);
-		console.loadCommands(commands);
-		console.setOutputOverride();
-		console.setVisible(true);
-	}
-
-	public static void main(String[] args)
-	{
-		runDemoTest();
-		for (int i = 0; i < 5; i++)
-			System.out.println(i);
 	}
 }
