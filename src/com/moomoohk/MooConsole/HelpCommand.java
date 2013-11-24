@@ -15,7 +15,7 @@ public class HelpCommand extends Command
 
 	public boolean check(String[] params)
 	{
-		if (CommandsManager.findCommand(params[0]) == null)
+		if (params.length > 0 && CommandsManager.findCommand(params[0]) == null)
 		{
 			this.outputMessage = "Command not found!";
 			this.outputColor = Color.red;
