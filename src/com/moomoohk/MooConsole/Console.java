@@ -94,12 +94,13 @@ public class Console extends JFrame
 		this.input = new JTextField(40);
 		this.input.setBackground(Color.gray);
 		this.input.setMaximumSize(new Dimension(400, 15));
+		this.input.setFocusTraversalKeysEnabled(false);
 		this.input.addKeyListener(new KeyAdapter()
 		{
 			@Override
-			public void keyPressed(KeyEvent arg0)
+			public void keyPressed(KeyEvent ke)
 			{
-				if (arg0.getKeyCode() == 38)
+				if (ke.getKeyCode() == 38)
 				{
 					if (log.size() > 0)
 					{
@@ -111,7 +112,7 @@ public class Console extends JFrame
 					}
 				}
 				else
-					if (arg0.getKeyCode() == 40)
+					if (ke.getKeyCode() == 40)
 					{
 						if (lastCommandSelector != -1)
 							lastCommandSelector--;
@@ -122,7 +123,7 @@ public class Console extends JFrame
 					}
 					else
 						lastCommandSelector = -1;
-				if (arg0.getKeyCode() == 10)
+				if (ke.getKeyCode() == 10)
 				{
 					if (input.getText().trim().length() != 0 && log.indexOf(input.getText()) != 0)
 						log.add(0, input.getText());
@@ -154,8 +155,14 @@ public class Console extends JFrame
 						input.setText("");
 					}
 				}
-				if (arg0.getKeyCode() == 27)
+				if (ke.getKeyCode() == 27)
 					input.setText("");
+			}
+
+			public void keyReleased(KeyEvent ke)
+			{
+				if (ke.getKeyCode() == 40 || ke.getKeyCode() == 38)
+					input.setCaretPosition(input.getText().length());
 			}
 		});
 		JTextPane consoleTextPane = new JTextPane();
@@ -283,5 +290,11 @@ public class Console extends JFrame
 		{
 			write("" + b);
 		}
+	}
+
+	public static void main(String[] args)
+	{
+		Console console = new Console();
+		console.setVisible(true);
 	}
 }

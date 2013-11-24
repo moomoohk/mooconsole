@@ -1,5 +1,7 @@
 package com.moomoohk.MooConsole;
 
+import java.awt.Color;
+
 import com.moomoohk.MooCommands.Command;
 import com.moomoohk.MooCommands.CommandsManager;
 
@@ -11,18 +13,25 @@ public class HelpCommand extends Command
 		super();
 	}
 
+	public boolean check(String[] params)
+	{
+		if (CommandsManager.findCommand(params[0]) == null)
+		{
+			this.outputMessage = "Command not found!";
+			this.outputColor = Color.red;
+			return false;
+		}
+		return true;
+	}
+
 	@Override
 	public void execute(String[] params)
 	{
 		if (params.length == 0)
 		{
+			this.outputMessage = "---";
 			for (Command c : CommandsManager.getAllCommands())
-				this.outputMessage += c.toString() + "\n";
-			return;
-		}
-		if (CommandsManager.findCommand(params[0]) == null)
-		{
-			this.outputMessage = "Command not found!";
+				this.outputMessage += "\n" + c.toString() + "\n---";
 			return;
 		}
 		this.outputMessage = CommandsManager.findCommand(params[0]).toString();
