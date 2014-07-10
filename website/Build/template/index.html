@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Moomoohk's site. Contains all my major Java projects.">
+		<meta name="robots" content="index, follow">
+
+		
+        <!-- Hammer reload -->
+          <script>
+            setInterval(function(){
+              try {
+                if(typeof ws != 'undefined' && ws.readyState == 1){return true;}
+                ws = new WebSocket('ws://'+(location.host || 'localhost').split(':')[0]+':35353')
+                ws.onopen = function(){ws.onclose = function(){document.location.reload()}}
+                ws.onmessage = function(){
+                  var links = document.getElementsByTagName('link'); 
+                    for (var i = 0; i < links.length;i++) { 
+                    var link = links[i]; 
+                    if (link.rel === 'stylesheet' && !link.href.match(/typekit/)) { 
+                      href = link.href.replace(/((&|\?)hammer=)[^&]+/,''); 
+                      link.href = href + (href.indexOf('?')>=0?'&':'?') + 'hammer='+(new Date().valueOf());
+                    }
+                  }
+                }
+              }catch(e){}
+            }, 1000)
+          </script>
+        <!-- /Hammer reload -->
+      
+
+		<link href="http://fonts.googleapis.com/css?family=PT+Sans:400italic,400,700italic,700" rel="stylesheet" type="text/css">
+
+		<link rel='stylesheet' href='assets/css/normalize.css'>
+<link rel='stylesheet' href='assets/css/fonts.css'>
+<link rel='stylesheet' href='assets/css/style.css'>
+<link rel='stylesheet' href='assets/css/prettify.css'>
+		<script src='assets/js/jquery-1.8.3.min.js'></script>
+<script src='assets/js/app.js'></script>
+<script src='assets/js/google-code-prettify/prettify.js'></script>
+<script src='assets/js/snaptortoise-konami-js-93c5489/konami.js'></script>
+
+		<link href="assets/favicon.ico" rel="shortcut icon">
+		<title>moomoohk/moobootstrap</title>
+		<script type="application/javascript">
+			function onLoad() {
+				prettyPrint();
+				$("ol.linenums").each(function(index) {
+					if ($(this).children().length == 1)
+						$(this).remove();
+				});
+				var footerBgColor = $("#footer").css("background-color");
+				var textContents = $("#footer").text().trim();
+				$("#footer").on("mouseenter", function() {
+					$(this).text("Return to top");
+					$(this).css("background-color", "#8999A7");
+				}).on("mouseleave", function() {
+					$(this).text(textContents);
+					$(this).css("background-color", footerBgColor);
+				}).mousedown(function(event) {
+					if (event.which == 1)
+						$("html, body").animate({
+							scrollTop : 0
+						}, 400);
+				});
+			}
+		</script>
+		<script type="text/javascript" src="assets/js/slideshow.js"></script>
+	</head>
+
+	<body onload="onLoad()">
+		<script>
+			/* Oh what's this */
+			$(document).ready(function() {
+				new Konami(function() {
+					var audioElement = document.createElement("audio");
+					audioElement.setAttribute("src", "assets/audio/aristotle.m4a");
+					audioElement.setAttribute("autoplay", "autoplay");
+				});
+			});
+		</script>
+		<header>
+			<!-- @todo Do mobile styling -->
+
+<nav id="main">
+	<ul id="topList">
+		<li><p unselectable="on">moomoohk</p></li>
+		<li><div class="headerDivider"></div></li>
+		<li><a href="/index.html">Home</a></li>
+		<li><div class="headerDivider"></div></li>
+		<li><a href="/projects.html">Projects</a>
+			<ul>
+				<li><a href="/grame/">Grame</a>
+					<ul>
+						<li><a href="/grame/docs/">JavaDocs</a></li>
+						<li><a href="/grame/#downloads">Download</a></li>
+					</ul>
+				</li>
+				<li><a href="/reactionkeeper.html">Reaction Keeper</a>
+					<ul>
+						<li><a href="/reactionkeeper.html#downloads">Download</a></li>
+					</ul>
+				</li>
+				<li><a href="/trackingmanager.html">Tracking Manager</a>
+					<ul>
+						<li><a href="/trackingmanager.html#downloads">Download</a></li>
+					</ul>
+				</li>
+				<li><a href="/moocommands/">MooCommands</a>
+					<ul>
+						<li><a href="/moocommands/docs">JavaDocs</a></li>
+						<li><a href="/moocommands/#downloads">Download</a></li>
+					</ul>
+				</li>
+				<li><a href="/mooconsole/">MooConsole</a>
+					<ul>
+						<li><a href="/mooconsole/docs">JavaDocs</a></li>
+						<li><a href="/mooconsole/#downloads">Download</a></li>
+					</ul>
+				</li>
+				<li><a href="/mootilities/">Mootilities</a>
+					<ul>
+						<li><a href="/mootilities/docs">JavaDocs</a></li>
+						<li><a href="/mootilities/#downloads">Download</a></li>
+					</ul>
+				</li>
+				<li><a href="/moobootstrap/">MooBootstrap</a>
+					<ul>
+						<li><a href="/moobootstrap/docs">JavaDocs</a></li>
+						<li><a href="/moobootstrap/#downloads">Download</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li><div class="headerDivider"></div></li>
+		<li><a href="/contact.html">Contact</a>
+			<ul>
+				<li>
+					<a href="http://twitter.com/moomoohk" target="_blank">Twitter</a>
+				</li>
+				<li>
+					<a href="http://youtube.com/moomoohk" target="_blank">YouTube</a>
+				</li>
+				<li>
+					<a href="http://webchat.freenode.net?channels=%23moomoohk&uio=Mj10cnVlJjQ9dHJ1ZSYxMT0yMzYff" target="_blank">IRC</a>
+				</li>
+				<li>
+					<a href="http://github.com/moomoohk" target="_blank">GitHub</a>
+				</li>
+			</ul>
+		</li>
+		<li><div class="headerDivider"></div></li>
+	</ul>
+</nav>
+		</header>
+
+		<section class="announcement">
+			<p>
+				This site is still very much under construction! Sorry for all the empty pages and 404's
+			</p>
+		</section>
+<section>
+	MooCommands is a library that provides a system where objects are created to represent different text commands, which can then be interpreted and executed with ease.
+</section>
+<!-- <section id="downloads">
+	<h1>Downloads</h1>
+	<p>
+		<ul>
+			<li><a href="https://github.com/moomoohk/moobootstrap/tarball/master">tar.gz</a></li>
+			<li><a href="https://github.com/moomoohk/moobootstrap/zipball/master">.zip</a></li>
+		</ul>
+	</p>
+</section> -->
+		<section id="footer">
+			© moomoohk 2014
+		</section>
+	</body>
+</html>
