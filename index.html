@@ -32,16 +32,15 @@
 
 		<link href="http://fonts.googleapis.com/css?family=PT+Sans:400italic,400,700italic,700" rel="stylesheet" type="text/css">
 
-		<link rel='stylesheet' href='assets/css/normalize.css'>
-<link rel='stylesheet' href='assets/css/fonts.css'>
-<link rel='stylesheet' href='assets/css/style.css'>
-<link rel='stylesheet' href='assets/css/prettify.css'>
-		<script src='assets/js/jquery-1.8.3.min.js'></script>
-<script src='assets/js/app.js'></script>
-<script src='assets/js/google-code-prettify/prettify.js'></script>
-<script src='assets/js/snaptortoise-konami-js-93c5489/konami.js'></script>
+		<link rel='stylesheet' href='template/assets/css/normalize.css'>
+<link rel='stylesheet' href='template/assets/css/style.css'>
+<link rel='stylesheet' href='template/assets/css/prettify.css'>
+		<script src='template/assets/js/jquery-1.8.3.min.js'></script>
+<script src='template/assets/js/app.js'></script>
+<script src='template/assets/js/google-code-prettify/prettify.js'></script>
+<script src='template/assets/js/snaptortoise-konami-js-93c5489/konami.js'></script>
 
-		<link href="assets/favicon.ico" rel="shortcut icon">
+		<link href="template/assets/favicon.ico" rel="shortcut icon">
 		<title>moomoohk/moobootstrap</title>
 		<script type="application/javascript">
 			function onLoad() {
@@ -66,7 +65,7 @@
 				});
 			}
 		</script>
-		<script type="text/javascript" src="assets/js/slideshow.js"></script>
+		<script type="text/javascript" src="template/assets/js/slideshow.js"></script>
 	</head>
 
 	<body onload="onLoad()">
@@ -75,7 +74,7 @@
 			$(document).ready(function() {
 				new Konami(function() {
 					var audioElement = document.createElement("audio");
-					audioElement.setAttribute("src", "assets/audio/aristotle.m4a");
+					audioElement.setAttribute("src", "template/assets/audio/aristotle.m4a");
 					audioElement.setAttribute("autoplay", "autoplay");
 				});
 			});
@@ -161,7 +160,9 @@
 			</p>
 		</section>
 <section>
-	MooCommands is a library that provides a system where objects are created to represent different text commands, which can then be interpreted and executed with ease.
+	MooConsole is a library which provides a console window which can be easily implemented into any program.
+	<br>
+	It's great for logging and also executing <a href="/moocommands">MooCommands</a>.
 </section>
 <!-- <section id="downloads">
 	<h1>Downloads</h1>
