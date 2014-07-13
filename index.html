@@ -31,6 +31,7 @@
       
 
 		<link href="http://fonts.googleapis.com/css?family=PT+Sans:400italic,400,700italic,700" rel="stylesheet" type="text/css">
+		<link href='http://fonts.googleapis.com/css?family=PT+Mono' rel='stylesheet' type='text/css'>
 
 		<link rel='stylesheet' href='template/assets/css/normalize.css'>
 <link rel='stylesheet' href='template/assets/css/style.css'>
@@ -41,9 +42,15 @@
 <script src='template/assets/js/snaptortoise-konami-js-93c5489/konami.js'></script>
 
 		<link href="template/assets/favicon.ico" rel="shortcut icon">
-		<title>moomoohk/moobootstrap</title>
+		<title>moomoohk/mooconsole</title>
 		<script type="application/javascript">
-			function onLoad() {
+			$(document).ready(function() {
+				/* Oh what's this */
+				new Konami(function() {
+					var audioElement = document.createElement("audio");
+					audioElement.setAttribute("src", "template/assets/audio/aristotle.m4a");
+					audioElement.setAttribute("autoplay", "autoplay");
+				});
 				prettyPrint();
 				$("ol.linenums").each(function(index) {
 					if ($(this).children().length == 1)
@@ -63,21 +70,11 @@
 							scrollTop : 0
 						}, 400);
 				});
-			}
+			});
 		</script>
 	</head>
 
-	<body onload="onLoad()">
-		<script>
-			/* Oh what's this */
-			$(document).ready(function() {
-				new Konami(function() {
-					var audioElement = document.createElement("audio");
-					audioElement.setAttribute("src", "template/assets/audio/aristotle.m4a");
-					audioElement.setAttribute("autoplay", "autoplay");
-				});
-			});
-		</script>
+	<body>
 		<header>
 			<!-- @todo Do mobile styling -->
 
@@ -163,12 +160,12 @@
 	<br>
 	It's great for logging and also executing <a href="/moocommands">MooCommands</a>.
 </section>
-<!-- <section id="downloads">
-	<h1>Downloads</h1>
+<!-- <section id="links">
+	<h1>Links</h1>
 	<p>
 		<ul>
-			<li><a href="https://github.com/moomoohk/moobootstrap/tarball/master">tar.gz</a></li>
-			<li><a href="https://github.com/moomoohk/moobootstrap/zipball/master">.zip</a></li>
+			<li><a href="https://github.com/moomoohk/mooconsole">GitHub repo</a></li>
+			<li><a href="https://github.com/moomoohk/mooconsole/releases/latest">Latest release on GitHub</a></li>
 		</ul>
 	</p>
 </section> -->
