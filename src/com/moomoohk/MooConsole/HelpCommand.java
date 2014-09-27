@@ -5,6 +5,11 @@ import java.awt.Color;
 import com.moomoohk.MooCommands.Command;
 import com.moomoohk.MooCommands.CommandsManager;
 
+/**
+ * 
+ * @author Meshulam Silk (moomoohk@ymail.com)
+ * @since Jul 17, 2014
+ */
 public class HelpCommand extends Command
 {
 
@@ -13,6 +18,7 @@ public class HelpCommand extends Command
 		super();
 	}
 
+	@Override
 	public boolean check(String[] params)
 	{
 		if (params.length > 0 && CommandsManager.findCommand(params[0]) == null)

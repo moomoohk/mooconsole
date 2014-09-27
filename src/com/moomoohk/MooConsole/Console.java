@@ -31,7 +31,7 @@ import com.moomoohk.MooCommands.Command;
 import com.moomoohk.MooCommands.CommandsManager;
 
 /**
- * @author Meshulam Silk <moomoohk@ymail.com>
+ * @author Meshulam Silk (moomoohk@ymail.com)
  * @version 1.0
  * @since 2013-03-08
  */
@@ -46,7 +46,7 @@ public class Console extends JFrame
 	private SimpleAttributeSet consoleAttributeSet;
 	private JTextField input;
 	public static final String version = "2.0";
-	private ArrayList<String> log;
+	private final ArrayList<String> log;
 	private int lastCommandSelector;
 
 	/**
@@ -63,19 +63,21 @@ public class Console extends JFrame
 		getContentPane().add(this.input);
 		addText("Welcome to MooConsole v" + version + "\n", new Color(81, 148, 237));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		log = new ArrayList<String>();
-		lastCommandSelector = -1;
+		this.log = new ArrayList<String>();
+		this.lastCommandSelector = -1;
 		pack();
 		setLocationRelativeTo(null);
 		addWindowFocusListener(new WindowFocusListener()
 		{
+			@Override
 			public void windowLostFocus(WindowEvent arg0)
 			{
 			}
 
+			@Override
 			public void windowGainedFocus(WindowEvent arg0)
 			{
-				input.requestFocus();
+				Console.this.input.requestFocus();
 			}
 		});
 	}
@@ -102,67 +104,68 @@ public class Console extends JFrame
 			{
 				if (ke.getKeyCode() == 38)
 				{
-					if (log.size() > 0)
+					if (Console.this.log.size() > 0)
 					{
-						if (lastCommandSelector != log.size() - 1)
-							lastCommandSelector++;
-						if (lastCommandSelector == log.size())
-							lastCommandSelector = log.size() - 1;
-						input.setText(log.get(lastCommandSelector));
+						if (Console.this.lastCommandSelector != Console.this.log.size() - 1)
+							Console.this.lastCommandSelector++;
+						if (Console.this.lastCommandSelector == Console.this.log.size())
+							Console.this.lastCommandSelector = Console.this.log.size() - 1;
+						Console.this.input.setText(Console.this.log.get(Console.this.lastCommandSelector));
 					}
 				}
 				else
 					if (ke.getKeyCode() == 40)
 					{
-						if (lastCommandSelector != -1)
-							lastCommandSelector--;
-						if (lastCommandSelector == -1)
-							input.setText("");
-						if (log.size() > 0 && lastCommandSelector >= 0)
-							input.setText(log.get(lastCommandSelector));
+						if (Console.this.lastCommandSelector != -1)
+							Console.this.lastCommandSelector--;
+						if (Console.this.lastCommandSelector == -1)
+							Console.this.input.setText("");
+						if (Console.this.log.size() > 0 && Console.this.lastCommandSelector >= 0)
+							Console.this.input.setText(Console.this.log.get(Console.this.lastCommandSelector));
 					}
 					else
-						lastCommandSelector = -1;
+						Console.this.lastCommandSelector = -1;
 				if (ke.getKeyCode() == 10)
 				{
-					if (input.getText().trim().length() != 0 && log.indexOf(input.getText()) != 0)
-						log.add(0, input.getText());
-					lastCommandSelector = -1;
-					if (input.getText().trim().length() == 0)
+					if (Console.this.input.getText().trim().length() != 0 && Console.this.log.indexOf(Console.this.input.getText()) != 0)
+						Console.this.log.add(0, Console.this.input.getText());
+					Console.this.lastCommandSelector = -1;
+					if (Console.this.input.getText().trim().length() == 0)
 					{
-						input.setText("");
+						Console.this.input.setText("");
 						return;
 					}
 					try
 					{
-						Command command = CommandsManager.findCommand(input.getText());
+						Command command = CommandsManager.findCommand(Console.this.input.getText());
 						if (command == null)
 						{
 							addText("Command not found!\n", Color.red);
-							input.setText("");
+							Console.this.input.setText("");
 						}
 						else
 						{
-							String output = command.checkAndExecute(CommandsManager.parseParams(input.getText()));
+							String output = command.checkAndExecute(CommandsManager.parseParams(Console.this.input.getText()));
 							if (output != null && output.trim() != "")
 								addText(output + "\n", command.getOutputColor());
-							input.setText("");
+							Console.this.input.setText("");
 						}
 					}
 					catch (NoClassDefFoundError e)
 					{
 						addText("Problem! Are you sure you have MooCommands installed? Get the latest version here: https://github.com/moomoohk/MooCommands/raw/master/Build/MooCommands.jar\n", Color.red);
-						input.setText("");
+						Console.this.input.setText("");
 					}
 				}
 				if (ke.getKeyCode() == 27)
-					input.setText("");
+					Console.this.input.setText("");
 			}
 
+			@Override
 			public void keyReleased(KeyEvent ke)
 			{
 				if (ke.getKeyCode() == 40 || ke.getKeyCode() == 38)
-					input.setCaretPosition(input.getText().length());
+					Console.this.input.setCaretPosition(Console.this.input.getText().length());
 			}
 		});
 		JTextPane consoleTextPane = new JTextPane();
@@ -211,7 +214,7 @@ public class Console extends JFrame
 	 * 
 	 * @param text
 	 *            String to add.
-	 * @param Color
+	 * @param color
 	 *            of font to use.
 	 */
 	public void addText(String text, Color color)
@@ -226,15 +229,14 @@ public class Console extends JFrame
 			boolean atBottom = vbar.getMaximum() == vbar.getValue() + vbar.getVisibleAmount();
 			this.consoleDoc.insertString(this.consoleDoc.getLength(), text, this.consoleAttributeSet);
 			if (atBottom)
-			{
 				EventQueue.invokeLater(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						vbar.setValue(vbar.getMaximum());
 					}
 				});
-			}
 		}
 		catch (BadLocationException e)
 		{
@@ -255,7 +257,7 @@ public class Console extends JFrame
 
 	private class OutputOverride extends PrintStream
 	{
-		private boolean error;
+		private final boolean error;
 
 		public OutputOverride(OutputStream str, boolean error)
 		{
