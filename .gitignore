@@ -1,5 +1,3 @@
 bin/
-bin/*
 *.class
-javadoc/
-bin/com/moomoohk/MooConsole/Console$1.class
+Build/
