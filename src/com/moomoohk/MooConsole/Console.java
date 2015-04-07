@@ -37,9 +37,6 @@ import com.moomoohk.MooCommands.CommandsManager;
  */
 public class Console extends JFrame
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JScrollPane scrollPane;
 	private StyledDocument consoleDoc;
@@ -182,7 +179,7 @@ public class Console extends JFrame
 
 	/**
 	 * Creates and returns a SpringLayout.
-	 * 
+	 *
 	 * @return A SpringLayout.
 	 */
 	private SpringLayout getSpringLayout()
@@ -200,7 +197,7 @@ public class Console extends JFrame
 
 	/**
 	 * Adds a String to the text area and colors the font white.
-	 * 
+	 *
 	 * @param text
 	 *            String to add.
 	 */
@@ -211,7 +208,7 @@ public class Console extends JFrame
 
 	/**
 	 * Adds a String to the text area.
-	 * 
+	 *
 	 * @param text
 	 *            String to add.
 	 * @param color
